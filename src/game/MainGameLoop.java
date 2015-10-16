@@ -1,7 +1,10 @@
 package game;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
+import entities.Camera;
+import entities.Entity;
 import models.RawModel;
 import models.TextureModel;
 import render.DisplayManager;
@@ -16,7 +19,6 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		
 		Loader loader = new Loader();
-		Renderer renderer = new Renderer();
 		
 //		float[] vertices = {
 //			-0.5f, 0.5f, 0f,
@@ -47,17 +49,24 @@ public class MainGameLoop {
 		RawModel model = loader.load2VAO(vertices, indices, textureCoords);
 		ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
 		TextureModel textureModel = new TextureModel(model, texture);
-		ShaderProgram program = new StaticShader();
+		StaticShader shader = new StaticShader();
+		Renderer renderer = new Renderer();
+		Entity entity = new Entity(textureModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+		
+		Camera camera = new Camera();
 		
 		while(!Display.isCloseRequested()){
+//			entity.increasePosition(0, 0, -0.01f);
+			camera.move();
 			renderer.prepare();
-			program.start();
-			renderer.render(textureModel);
-			program.stop();
+			shader.start();
+			shader.setViewMat4(camera);
+			renderer.render(entity, shader);
+			shader.stop();
 			DisplayManager.updateDisplay();
 		}
 		
-		program.cleanup();
+		shader.cleanup();
 		loader.cleanup();
 		DisplayManager.closeDisplay();
 	}
