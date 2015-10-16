@@ -2,6 +2,7 @@
 
 in vec3 position_modelspace;
 in vec2 textureCoords;
+uniform mat4 transformMat4;
 
 out vec2 pass_textureCoords;
 
