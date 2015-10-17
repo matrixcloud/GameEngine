@@ -14,9 +14,8 @@ import models.RawModel;
 import models.TextureModel;
 import render.DisplayManager;
 import render.Loader;
+import render.MasterRenderer;
 import render.OBJLoader;
-import render.Renderer;
-import shaders.StaticShader;
 import textures.ModelTexture;
 
 public class MainGameLoop {
@@ -30,8 +29,6 @@ public class MainGameLoop {
 		texture.setShineDamper(10);
 		texture.setReflectivity(1);
 		TextureModel textureModel = new TextureModel(model, texture);
-		StaticShader shader = new StaticShader();
-		Renderer renderer = new Renderer();
 		
 		List<Entity> cubes = new ArrayList<>();
 		Random rd = new Random();
@@ -45,21 +42,18 @@ public class MainGameLoop {
 		Camera camera = new Camera();
 		Light light = new Light(new Vector3f(0, 0, -25), new Vector3f(1, 1, 1));
 		
+		
+		MasterRenderer renderer = new MasterRenderer();
 		while(!Display.isCloseRequested()){
-//			entity.increaseRotation(0, 1, 0);
 			camera.move();
-			renderer.prepare();
-			shader.start();
-			shader.setViewMat4(camera);
-			shader.setLight(light);
 			for(Entity cube : cubes){
-				renderer.render(cube, shader);
+				renderer.processEntity(cube);
 			}
-			shader.stop();
+			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
 		
-		shader.cleanup();
+		renderer.cleanup();
 		loader.cleanup();
 		DisplayManager.closeDisplay();
 	}
