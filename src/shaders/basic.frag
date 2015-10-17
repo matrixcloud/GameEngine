@@ -17,13 +17,15 @@ uniform float reflectivity;
 void main(){
 	vec3 n = normalize(surfaceNormal);
 	vec3 l = normalize(toLightVector);
-	float cosTheta = clamp(dot(n, l), 0, 1);//brightness 
-	vec3 diffuse = cosTheta * lightColor;
+	float cosTheta = dot(n, l);
+	float brightness = max(cosTheta, 0.2); 
+	vec3 diffuse = brightness * lightColor;
 
 	vec3 unitToCameraVector = normalize(toCameraVector);
 	vec3 incomingLight = -l;
 	vec3 reflectedLightDirection = reflect(incomingLight, n);
-	float specularFactor = clamp(dot(reflectedLightDirection, unitToCameraVector), 0, 1);
+	float specularFactor = dot(reflectedLightDirection, unitToCameraVector);
+	specularFactor = max(specularFactor, 0.0);
 	float dampedFactor = pow(specularFactor, shineDamper);
 	vec3 finalSpecular = reflectivity * dampedFactor * lightColor;
 
