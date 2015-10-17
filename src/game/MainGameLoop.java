@@ -22,7 +22,9 @@ public class MainGameLoop {
 		Loader loader = new Loader();
 		
 		RawModel model = OBJLoader.load("dragon", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("image"));
+		ModelTexture texture = new ModelTexture(loader.loadTexture("yellow"));
+		texture.setShineDamper(10);
+		texture.setReflectivity(1);
 		TextureModel textureModel = new TextureModel(model, texture);
 		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer();

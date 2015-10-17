@@ -12,6 +12,7 @@ uniform vec3 lightPosition_worldspace;
 out vec2 pass_textureCoords;
 out vec3 toLightVector;
 out vec3 surfaceNormal;
+out vec3 toCameraVector;
 
 void main(void){
 	vec4 position_worldspace = transformMat4 * vec4(position_modelspace, 1.0);
@@ -20,4 +21,5 @@ void main(void){
 	
 	surfaceNormal = (transformMat4 * vec4(normal, 0)).xyz;
 	toLightVector = lightPosition_worldspace - position_worldspace.xyz;
+	toCameraVector = (inverse(viewMat4) * vec4(0, 0, 0, 1)).xyz - position_worldspace.xyz;
 }

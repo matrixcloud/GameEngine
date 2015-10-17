@@ -11,6 +11,7 @@ import entities.Entity;
 import models.RawModel;
 import models.TextureModel;
 import shaders.StaticShader;
+import textures.ModelTexture;
 import utils.Maths;
 
 public class Renderer {
@@ -24,8 +25,9 @@ public class Renderer {
 	}
 	
 	public void prepare(){
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glClearColor(0, 0, 1, 1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	public void render(Entity entity, StaticShader shader){
@@ -41,6 +43,8 @@ public class Renderer {
 				entity.getScale());
 		shader.setTransformMat4(transformationMat4);
 		shader.setProjectionMat4(projectionMat4);
+		ModelTexture texture = textureModel.getTexture();
+		shader.setShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureModel.getTexture().getTextureID());
