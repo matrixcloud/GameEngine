@@ -1,5 +1,9 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -21,18 +25,25 @@ public class MainGameLoop {
 		
 		Loader loader = new Loader();
 		
-		RawModel model = OBJLoader.load("dragon", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("yellow"));
+		RawModel model = OBJLoader.load("cube", loader);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("grass"));
 		texture.setShineDamper(10);
 		texture.setReflectivity(1);
 		TextureModel textureModel = new TextureModel(model, texture);
 		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer();
-		Entity entity = new Entity(textureModel, new Vector3f(0, 0, -30), 0, 0, 0, 1);
+		
+		List<Entity> cubes = new ArrayList<>();
+		Random rd = new Random();
+		for(int i = 0; i < 200; i++){
+			float x = rd.nextFloat() * 100 - 50;
+			float y = rd.nextFloat() * 100 - 50;
+			float z = rd.nextFloat() * - 300;
+			cubes.add(new Entity(textureModel, new Vector3f(x, y, z), rd.nextFloat() * 180, rd.nextFloat() * 180, 0, 1));
+		}
 		
 		Camera camera = new Camera();
 		Light light = new Light(new Vector3f(0, 0, -25), new Vector3f(1, 1, 1));
-		entity.increaseRotation(20, 180, 0);
 		
 		while(!Display.isCloseRequested()){
 //			entity.increaseRotation(0, 1, 0);
@@ -41,7 +52,9 @@ public class MainGameLoop {
 			shader.start();
 			shader.setViewMat4(camera);
 			shader.setLight(light);
-			renderer.render(entity, shader);
+			for(Entity cube : cubes){
+				renderer.render(cube, shader);
+			}
 			shader.stop();
 			DisplayManager.updateDisplay();
 		}
