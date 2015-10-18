@@ -41,8 +41,8 @@ public class MainGameLoop {
 			//add tree
 			float x = rd.nextFloat() * 800 - 400;
 			float z = rd.nextFloat() * -600;
-//			Entity tree = new Entity(treeModel, new Vector3f(x, 0, z), 0, 0, 0, rd.nextFloat() * 10 + 0.1f);
-//			entites.add(tree);
+			Entity tree = new Entity(treeModel, new Vector3f(x, 0, z), 0, 0, 0, rd.nextFloat() * 10 + 0.1f);
+			entites.add(tree);
 			//add grass
 			x = rd.nextFloat() * 800 - 400;
 			z = rd.nextFloat() * -600;
