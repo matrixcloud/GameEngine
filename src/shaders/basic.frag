@@ -1,6 +1,5 @@
 #version 400 core
 
-in vec3 color;
 in vec2 pass_textureCoords;
 in vec3 toLightVector;
 in vec3 surfaceNormal;
@@ -29,6 +28,8 @@ void main(){
 	float dampedFactor = pow(specularFactor, shineDamper);
 	vec3 finalSpecular = reflectivity * dampedFactor * lightColor;
 
-	fragColor = vec4(diffuse, 1.0) * texture(textureSampler, pass_textureCoords)
+	vec4 textureColor = texture(textureSampler, pass_textureCoords);
+
+	fragColor = vec4(diffuse, 1.0) * textureColor
 	 				+ vec4(finalSpecular, 1.0);
 }

@@ -25,35 +25,46 @@ public class MainGameLoop {
 		
 		Camera camera = new Camera(new Vector3f(0, 10, -1));
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
-		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grass"));
+		//*******************Load Textures*************//
+		ModelTexture terrainTex = new ModelTexture(loader.loadTexture("grass"));
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
-		grassTex.setShineDamper(10);
-		grassTex.setReflectivity(0.1f);
-		treeTex.setReflectivity(10);
-		treeTex.setReflectivity(0.1f);
+		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
+		ModelTexture fernTex = new ModelTexture(loader.loadTexture("fern"));
 		
 		//*******************Entiy*************//
 		TextureModel treeModel = new TextureModel(OBJLoader.load("tree", loader), treeTex);
-		List<Entity> trees = new ArrayList<>();
+		TextureModel grassModel = new TextureModel(OBJLoader.load("grassModel", loader), grassTex);
+		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTex);
+		List<Entity> entites = new ArrayList<>();
 		Random rd = new Random();
 		for(int i = 0; i < 500; i++){
+			//add tree
 			float x = rd.nextFloat() * 800 - 400;
 			float z = rd.nextFloat() * -600;
-			
-			Entity e = new Entity(treeModel, new Vector3f(x, 0, z), 0, 0, 0, rd.nextFloat() * 10);
-			trees.add(e);
+//			Entity tree = new Entity(treeModel, new Vector3f(x, 0, z), 0, 0, 0, rd.nextFloat() * 10 + 0.1f);
+//			entites.add(tree);
+			//add grass
+			x = rd.nextFloat() * 800 - 400;
+			z = rd.nextFloat() * -600;
+			Entity grass = new Entity(grassModel, new Vector3f(x, 0, z), 0, 0, 0, 1);
+			entites.add(grass);
+			//add fern
+			x = rd.nextFloat() * 800 - 400;
+			z = rd.nextFloat() * -600;
+			Entity fern = new Entity(fernModel, new Vector3f(x, 0, z), 0, 0, 0, 0.6f);
+			entites.add(fern);
 		}
 		
-		Terrain terrain1 = new Terrain(0, -1, loader, grassTex);
-		Terrain terrain2 = new Terrain(-1, -1, loader, grassTex);
+		Terrain terrain1 = new Terrain(0, -1, loader, terrainTex);
+		Terrain terrain2 = new Terrain(-1, -1, loader, terrainTex);
 		MasterRenderer renderer = new MasterRenderer();
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
 			renderer.processTerrain(terrain1);
 			renderer.processTerrain(terrain2);
-			for (Entity tree : trees) {
-				renderer.processEntity(tree);
+			for (Entity entity : entites) {
+				renderer.processEntity(entity);
 			}
 			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
