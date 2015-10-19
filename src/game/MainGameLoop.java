@@ -29,7 +29,10 @@ public class MainGameLoop {
 		ModelTexture terrainTex = new ModelTexture(loader.loadTexture("grass"));
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
 		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
+		grassTex.setTransparent(true);
+		grassTex.setUseFakeLighting(true);
 		ModelTexture fernTex = new ModelTexture(loader.loadTexture("fern"));
+		fernTex.setTransparent(true);
 		
 		//*******************Entiy*************//
 		TextureModel treeModel = new TextureModel(OBJLoader.load("tree", loader), treeTex);

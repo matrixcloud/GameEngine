@@ -8,6 +8,7 @@ uniform mat4 transformMat4;
 uniform mat4 viewMat4;
 uniform mat4 projectionMat4;
 uniform vec3 lightPosition_worldspace;
+uniform float useFakeLighting;
 
 out vec2 pass_textureCoords;
 out vec3 toLightVector;
@@ -19,7 +20,12 @@ void main(void){
 	gl_Position = projectionMat4 * viewMat4 * position_worldspace;
 	pass_textureCoords = textureCoords;
 	
-	surfaceNormal = (transformMat4 * vec4(normal, 0)).xyz;
+	vec3 actualNormal = normal;
+	if(useFakeLighting > 0.5){
+		actualNormal = vec3(0, 1, 0);
+	}
+	
+	surfaceNormal = (transformMat4 * vec4(actualNormal, 0)).xyz;
 	toLightVector = lightPosition_worldspace - position_worldspace.xyz;
 	toCameraVector = (inverse(viewMat4) * vec4(0, 0, 0, 1)).xyz - position_worldspace.xyz;
 }
