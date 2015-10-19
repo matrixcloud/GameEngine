@@ -17,6 +17,8 @@ import render.MasterRenderer;
 import render.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 	public static void main(String[] args) {
@@ -25,13 +27,20 @@ public class MainGameLoop {
 		
 		Camera camera = new Camera(new Vector3f(0, 10, -1));
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
-		//*******************Load Textures*************//
-		ModelTexture terrainTex = new ModelTexture(loader.loadTexture("grass"));
+		//*******************Load terrain textures*************//
+		TerrainTexture backgroundTex = new TerrainTexture(loader.loadTexture("grassy"));
+		TerrainTexture rTex = new TerrainTexture(loader.loadTexture("dirt"));
+		TerrainTexture gTex = new TerrainTexture(loader.loadTexture("pinkFlowers"));
+		TerrainTexture bTex = new TerrainTexture(loader.loadTexture("path"));
+		TerrainTexture blendTex = new TerrainTexture(loader.loadTexture("blendMap"));
+		TerrainTexturePack texPack = new TerrainTexturePack(backgroundTex, rTex, gTex, bTex);
+		
+		//*****************Load entity textures**************//
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
 		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
+		ModelTexture fernTex = new ModelTexture(loader.loadTexture("fern"));
 		grassTex.setTransparent(true);
 		grassTex.setUseFakeLighting(true);
-		ModelTexture fernTex = new ModelTexture(loader.loadTexture("fern"));
 		fernTex.setTransparent(true);
 		
 		//*******************Entiy*************//
@@ -57,9 +66,9 @@ public class MainGameLoop {
 			Entity fern = new Entity(fernModel, new Vector3f(x, 0, z), 0, 0, 0, 0.6f);
 			entites.add(fern);
 		}
-		
-		Terrain terrain1 = new Terrain(0, -1, loader, terrainTex);
-		Terrain terrain2 = new Terrain(-1, -1, loader, terrainTex);
+
+		Terrain terrain1 = new Terrain(0, -1, loader, texPack, blendTex);
+		Terrain terrain2 = new Terrain(-1, -1, loader, texPack, blendTex);
 		MasterRenderer renderer = new MasterRenderer();
 		
 		while(!Display.isCloseRequested()){

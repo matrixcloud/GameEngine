@@ -61,6 +61,10 @@ public abstract class ShaderProgram {
 		GL20.glUniform1f(location, value);
 	}
 	
+	protected void setInt(int location, int value){
+		GL20.glUniform1i(location, value);
+	}
+	
 	protected void setVector(int location, Vector3f v3){
 		GL20.glUniform3f(location, v3.x, v3.y, v3.z);
 	}

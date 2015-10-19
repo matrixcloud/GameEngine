@@ -16,6 +16,12 @@ public class TerrainShader extends ShaderProgram {
 	private int lightColorLoc;
 	private int shineDamperLoc;
 	private int reflectivityLoc;
+	private int backgroundTexSamplerLoc;
+	private int rTexSamplerLoc;
+	private int gTexSamplerLoc;
+	private int bTexSamplerLoc;
+	private int blendTexSamplerLoc;
+	
 	
 	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -37,6 +43,19 @@ public class TerrainShader extends ShaderProgram {
 		lightColorLoc = super.getUniformLocation("lightColor");
 		shineDamperLoc = super.getUniformLocation("shineDamper");
 		reflectivityLoc = super.getUniformLocation("reflectivity");
+		backgroundTexSamplerLoc = super.getUniformLocation("backgroundTexSampler");
+		rTexSamplerLoc = super.getUniformLocation("rTexSampler");
+		gTexSamplerLoc = super.getUniformLocation("gTexSampler");
+		bTexSamplerLoc = super.getUniformLocation("brTexSampler");
+		blendTexSamplerLoc = super.getUniformLocation("blendTexSampler");
+	}
+	
+	public void connectTextureUnits(){
+		super.setInt(backgroundTexSamplerLoc, 0);
+		super.setInt(rTexSamplerLoc, 1);
+		super.setInt(gTexSamplerLoc, 2);
+		super.setInt(bTexSamplerLoc, 3);
+		super.setInt(blendTexSamplerLoc, 4);
 	}
 	
 	public void setShineVariables(float damper, float reflectivity){
