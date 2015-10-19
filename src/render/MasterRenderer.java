@@ -21,6 +21,10 @@ public class MasterRenderer {
 	private static final float FOV = 70.0f;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 100.0f;
+	//the sky color
+	private static final float RED = 0.5f;
+	private static final float GREEN = 0.5f;
+	private static final float BLUE = 0.5f;
 	private Matrix4f projectionMat4;
 	private StaticShader shader = new StaticShader();
 	private TerrainShader terrainShader = new TerrainShader();
@@ -28,6 +32,7 @@ public class MasterRenderer {
 	private EntityRenderer rendererer;
 	private Map<TextureModel,List<Entity>> entityMap = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
+	
 	
 	public MasterRenderer(){
 		enableCulling();
@@ -50,6 +55,7 @@ public class MasterRenderer {
 		shader.start();
 		shader.setLight(light);
 		shader.setViewMat4(camera);
+		shader.setSkyColor(RED, GREEN, BLUE);
 		rendererer.render(entityMap);
 		shader.stop();
 		
@@ -82,7 +88,7 @@ public class MasterRenderer {
 	public void prepare(){
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glClearColor(0, 0, 1, 1);
+		GL11.glClearColor(RED, GREEN, BLUE, 1);
 	}
 	
 	private void createProjectionMat4(){

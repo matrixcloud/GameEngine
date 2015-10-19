@@ -13,13 +13,23 @@ out vec2 pass_textureCoords;
 out vec3 toLightVector;
 out vec3 surfaceNormal;
 out vec3 toCameraVector;
+out float visibility;
+
+const float density = 0.0035;
+const float gradient = 5;
+
 
 void main(void){
 	vec4 position_worldspace = transformMat4 * vec4(position_modelspace, 1.0);
-	gl_Position = projectionMat4 * viewMat4 * position_worldspace;
+	vec4 position_cameraspace = viewMat4 * position_worldspace;
+	gl_Position = projectionMat4 * position_cameraspace;
 	pass_textureCoords = textureCoords * 40.0;
 	
 	surfaceNormal = (transformMat4 * vec4(normal, 0)).xyz;
 	toLightVector = lightPosition_worldspace - position_worldspace.xyz;
 	toCameraVector = (inverse(viewMat4) * vec4(0, 0, 0, 1)).xyz - position_worldspace.xyz;
+	
+	float distance = length(position_cameraspace.xyz);
+	visibility = exp(-pow(distance*density, gradient));
+	visibility = clamp(visibility, 0, 1);
 }
