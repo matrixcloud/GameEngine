@@ -26,7 +26,6 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		
-		Camera camera = new Camera(new Vector3f(0, 10, -1));
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 		//*******************Load terrain textures*************//
 		TerrainTexture backgroundTex = new TerrainTexture(loader.loadTexture("grassy"));
@@ -52,6 +51,7 @@ public class MainGameLoop {
 		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTex);
 		TextureModel playerModel = new TextureModel(OBJLoader.load("person", loader), playerTex);
 		Player player = new Player(playerModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
+		Camera camera = new Camera(player);
 		entites.add(player);
 		
 		Random rd = new Random();
@@ -79,7 +79,7 @@ public class MainGameLoop {
 		
 		
 		while(!Display.isCloseRequested()){
-//			camera.move();
+			camera.move();
 			player.move();
 			renderer.processTerrain(terrain1);
 			renderer.processTerrain(terrain2);
