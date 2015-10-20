@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 import models.TextureModel;
 import render.DisplayManager;
 import render.Loader;
@@ -77,7 +80,15 @@ public class MainGameLoop {
 			Entity fern = new Entity(fernModel, rd.nextInt(4), new Vector3f(x, y, z), 0, 0, 0, 0.6f);
 			entites.add(fern);
 		}
+		//****************Load GUI textures****************//
+		List<GuiTexture> guis = new ArrayList<>();
+		GuiTexture logoTex = new GuiTexture(loader.loadTexture("socuwan"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+		GuiTexture thinmatTex = new GuiTexture(loader.loadTexture("thinmatrix"),new Vector2f(0.3f, 0.4f), new Vector2f(0.25f, 0.25f));
+		guis.add(logoTex);
+		guis.add(thinmatTex);
+		
 		MasterRenderer renderer = new MasterRenderer();
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
@@ -87,6 +98,7 @@ public class MainGameLoop {
 				renderer.processEntity(entity);
 			}
 			renderer.render(light, camera);
+			guiRenderer.render(guis);
 			DisplayManager.updateDisplay();
 		}
 		
