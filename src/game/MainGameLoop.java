@@ -34,6 +34,7 @@ public class MainGameLoop {
 		TerrainTexture bTex = new TerrainTexture(loader.loadTexture("path"));
 		TerrainTexture blendTex = new TerrainTexture(loader.loadTexture("blendMap"));
 		TerrainTexturePack texPack = new TerrainTexturePack(backgroundTex, rTex, gTex, bTex);
+		Terrain terrain = new Terrain(0, -1, loader, texPack, blendTex, "heightMap");
 		
 		//*****************Load entity textures**************//
 		ModelTexture playerTex = new ModelTexture(loader.loadTexture("playerTexture"));
@@ -53,34 +54,34 @@ public class MainGameLoop {
 		Player player = new Player(playerModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
 		Camera camera = new Camera(player);
 		entites.add(player);
-		
+		//*****************Generate Entity***************//
 		Random rd = new Random();
 		for(int i = 0; i < 500; i++){
 			//add tree
-			float x = rd.nextFloat() * 800 - 400;
+			float x = rd.nextFloat() * 800;
 			float z = rd.nextFloat() * -600;
-			Entity tree = new Entity(treeModel, new Vector3f(x, 0, z), 0, 0, 0, rd.nextFloat() * 10 + 0.1f);
+			float y = terrain.getHeightOfTerrain(x, z);
+			Entity tree = new Entity(treeModel, new Vector3f(x, y, z), 0, 0, 0, rd.nextFloat() * 10 + 0.1f);
 			entites.add(tree);
 			//add grass
-			x = rd.nextFloat() * 800 - 400;
+			x = rd.nextFloat() * 800;
 			z = rd.nextFloat() * -600;
-			Entity grass = new Entity(grassModel, new Vector3f(x, 0, z), 0, 0, 0, 1);
+			y = terrain.getHeightOfTerrain(x, z);
+			Entity grass = new Entity(grassModel, new Vector3f(x, y, z), 0, 0, 0, 1);
 			entites.add(grass);
 			//add fern
-			x = rd.nextFloat() * 800 - 400;
+			x = rd.nextFloat() * 800;
 			z = rd.nextFloat() * -600;
-			Entity fern = new Entity(fernModel, new Vector3f(x, 0, z), 0, 0, 0, 0.6f);
+			y = terrain.getHeightOfTerrain(x, z);
+			Entity fern = new Entity(fernModel, new Vector3f(x, y, z), 0, 0, 0, 0.6f);
 			entites.add(fern);
 		}
-
-		Terrain terrain1 = new Terrain(0, -1, loader, texPack, blendTex, "heightMap");
 		MasterRenderer renderer = new MasterRenderer();
-		
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
-			player.move(terrain1);
-			renderer.processTerrain(terrain1);
+			player.move(terrain);
+			renderer.processTerrain(terrain);
 			for (Entity entity : entites) {
 				renderer.processEntity(entity);
 			}
