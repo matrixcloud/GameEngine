@@ -73,8 +73,8 @@ public class MainGameLoop {
 			entites.add(fern);
 		}
 
-		Terrain terrain1 = new Terrain(0, -1, loader, texPack, blendTex);
-		Terrain terrain2 = new Terrain(-1, -1, loader, texPack, blendTex);
+		Terrain terrain1 = new Terrain(0, -1, loader, texPack, blendTex, "heightMap");
+		Terrain terrain2 = new Terrain(-1, -1, loader, texPack, blendTex, "heightMap");
 		MasterRenderer renderer = new MasterRenderer();
 		
 		
