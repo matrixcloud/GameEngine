@@ -19,7 +19,7 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColor;
 
-void main(){
+void main(){ 
 	vec4 blendTexColor = texture(blendTexSampler, pass_textureCoords);
 	float backgroundTexAmount = 1 - (blendTexColor.r + blendTexColor.g + blendTexColor.b);
 	vec2 tiledCoords = pass_textureCoords * 40;

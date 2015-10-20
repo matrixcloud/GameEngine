@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.TextureModel;
 import render.DisplayManager;
 import render.Loader;
@@ -36,6 +37,7 @@ public class MainGameLoop {
 		TerrainTexturePack texPack = new TerrainTexturePack(backgroundTex, rTex, gTex, bTex);
 		
 		//*****************Load entity textures**************//
+		ModelTexture playerTex = new ModelTexture(loader.loadTexture("playerTexture"));
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
 		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
 		ModelTexture fernTex = new ModelTexture(loader.loadTexture("fern"));
@@ -43,11 +45,15 @@ public class MainGameLoop {
 		grassTex.setUseFakeLighting(true);
 		fernTex.setTransparent(true);
 		
-		//*******************Entiy*************//
+		//*******************Load Entity Model*************//
+		List<Entity> entites = new ArrayList<>();
 		TextureModel treeModel = new TextureModel(OBJLoader.load("tree", loader), treeTex);
 		TextureModel grassModel = new TextureModel(OBJLoader.load("grassModel", loader), grassTex);
 		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTex);
-		List<Entity> entites = new ArrayList<>();
+		TextureModel playerModel = new TextureModel(OBJLoader.load("person", loader), playerTex);
+		Player player = new Player(playerModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
+		entites.add(player);
+		
 		Random rd = new Random();
 		for(int i = 0; i < 500; i++){
 			//add tree
@@ -71,8 +77,10 @@ public class MainGameLoop {
 		Terrain terrain2 = new Terrain(-1, -1, loader, texPack, blendTex);
 		MasterRenderer renderer = new MasterRenderer();
 		
+		
 		while(!Display.isCloseRequested()){
-			camera.move();
+//			camera.move();
+			player.move();
 			renderer.processTerrain(terrain1);
 			renderer.processTerrain(terrain2);
 			for (Entity entity : entites) {
