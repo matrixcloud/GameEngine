@@ -28,7 +28,6 @@ void main(){
 	vec4 gTexColor = texture(gTexSampler, tiledCoords) * blendTexColor.g;
 	vec4 bTexColor = texture(bTexSampler, tiledCoords) * blendTexColor.b;
 	vec4 totalColor = backgroundTexColor + rTexColor + gTexColor + bTexColor;
-	
 
 	vec3 n = normalize(surfaceNormal);
 	vec3 l = normalize(toLightVector);

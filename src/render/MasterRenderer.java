@@ -62,6 +62,7 @@ public class MasterRenderer {
 		terrainShader.start();
 		terrainShader.setLight(light);
 		terrainShader.setViewMat4(camera);
+		terrainShader.setSkyColor(RED, GREEN, BLUE);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		

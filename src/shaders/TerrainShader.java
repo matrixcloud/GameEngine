@@ -1,6 +1,7 @@
 package shaders;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Light;
@@ -21,7 +22,7 @@ public class TerrainShader extends ShaderProgram {
 	private int gTexSamplerLoc;
 	private int bTexSamplerLoc;
 	private int blendTexSamplerLoc;
-	
+	private int skyColorLoc;
 	
 	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -48,6 +49,7 @@ public class TerrainShader extends ShaderProgram {
 		gTexSamplerLoc = super.getUniformLocation("gTexSampler");
 		bTexSamplerLoc = super.getUniformLocation("bTexSampler");
 		blendTexSamplerLoc = super.getUniformLocation("blendTexSampler");
+		skyColorLoc = super.getUniformLocation("skyColor");
 	}
 	
 	public void connectTextureUnits(){
@@ -79,5 +81,9 @@ public class TerrainShader extends ShaderProgram {
 	public void setLight(Light light){
 		super.setVector(lightPosition_worldspaceLoc, light.getPosition());
 		super.setVector(lightColorLoc, light.getColor());
+	}
+	
+	public void setSkyColor(float r, float g, float b){
+		super.setVector(skyColorLoc, new Vector3f(r, g, b));
 	}
 }
