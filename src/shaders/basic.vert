@@ -9,6 +9,8 @@ uniform mat4 viewMat4;
 uniform mat4 projectionMat4;
 uniform vec3 lightPosition_worldspace;
 uniform float useFakeLighting;
+uniform float numberOfRows;
+uniform vec2 offset;
 
 out vec2 pass_textureCoords;
 out vec3 toLightVector;
@@ -23,7 +25,7 @@ void main(void){
 	vec4 position_worldspace = transformMat4 * vec4(position_modelspace, 1.0);
 	vec4 position_cameraspace = viewMat4 * position_worldspace;
 	gl_Position = projectionMat4 * position_cameraspace;
-	pass_textureCoords = textureCoords;
+	pass_textureCoords = (textureCoords/numberOfRows) + offset;
 	
 	vec3 actualNormal = normal;
 	if(useFakeLighting > 0.5){

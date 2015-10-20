@@ -40,16 +40,17 @@ public class MainGameLoop {
 		ModelTexture playerTex = new ModelTexture(loader.loadTexture("playerTexture"));
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
 		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
-		ModelTexture fernTex = new ModelTexture(loader.loadTexture("fern"));
+		ModelTexture fernTexAtlases = new ModelTexture(loader.loadTexture("fern"));
 		grassTex.setTransparent(true);
 		grassTex.setUseFakeLighting(true);
-		fernTex.setTransparent(true);
+		fernTexAtlases.setTransparent(true);
+		fernTexAtlases.setNumberOfRows(2);
 		
 		//*******************Load Entity Model*************//
 		List<Entity> entites = new ArrayList<>();
 		TextureModel treeModel = new TextureModel(OBJLoader.load("tree", loader), treeTex);
 		TextureModel grassModel = new TextureModel(OBJLoader.load("grassModel", loader), grassTex);
-		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTex);
+		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTexAtlases);
 		TextureModel playerModel = new TextureModel(OBJLoader.load("person", loader), playerTex);
 		Player player = new Player(playerModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
 		Camera camera = new Camera(player);
@@ -73,7 +74,7 @@ public class MainGameLoop {
 			x = rd.nextFloat() * 800;
 			z = rd.nextFloat() * -600;
 			y = terrain.getHeightOfTerrain(x, z);
-			Entity fern = new Entity(fernModel, new Vector3f(x, y, z), 0, 0, 0, 0.6f);
+			Entity fern = new Entity(fernModel, rd.nextInt(4), new Vector3f(x, y, z), 0, 0, 0, 0.6f);
 			entites.add(fern);
 		}
 		MasterRenderer renderer = new MasterRenderer();

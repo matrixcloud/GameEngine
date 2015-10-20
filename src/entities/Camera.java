@@ -8,7 +8,6 @@ public class Camera {
 	private float pitch;
 	private float yaw;
 	private float roll;
-	private float speed = 0.02f;
 	private Player player;
 	private float distanceFromPlayer;
 	private float angleAroundPlayer;

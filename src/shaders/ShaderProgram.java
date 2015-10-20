@@ -108,4 +108,8 @@ public abstract class ShaderProgram {
 		}
 		return shaderID;
 	}
+
+	public void setVector2D(int location, float x, float y) {
+		GL20.glUniform2f(location, x, y);
+	}
 }

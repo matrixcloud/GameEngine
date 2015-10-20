@@ -19,6 +19,8 @@ public class StaticShader extends ShaderProgram {
 	private int reflectivityLoc;
 	private int useFakeLightingLoc;
 	private int skyColorLoc;
+	private int numberOfRowsLoc;
+	private int offsetLoc;
 	
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -42,6 +44,8 @@ public class StaticShader extends ShaderProgram {
 		reflectivityLoc = super.getUniformLocation("reflectivity");
 		useFakeLightingLoc = super.getUniformLocation("useFakeLighting");
 		skyColorLoc = super.getUniformLocation("skyColor");
+		numberOfRowsLoc = super.getUniformLocation("numberOfRows");
+		offsetLoc = super.getUniformLocation("offset");
 	}
 	
 	public void setShineVariables(float damper, float reflectivity){
@@ -73,5 +77,13 @@ public class StaticShader extends ShaderProgram {
 	
 	public void setSkyColor(float r, float g, float b){
 		super.setVector(skyColorLoc, new Vector3f(r, g, b));
+	}
+	
+	public void setNumberOfRows(int numberOfRows){
+		super.setFloat(numberOfRowsLoc, numberOfRows);
+	}
+	
+	public void setOffset(float x, float y){
+		super.setVector2D(offsetLoc, x, y);
 	}
 }

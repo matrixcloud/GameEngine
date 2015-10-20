@@ -46,6 +46,7 @@ public class EntityRenderer {
 		GL20.glEnableVertexAttribArray(2);
 		ModelTexture texture = textureModel.getTexture();
 		shader.setShineVariables(texture.getShineDamper(), texture.getReflectivity());
+		shader.setNumberOfRows(texture.getNumberOfRows());
 		if(texture.isTransparent()){
 			MasterRenderer.disableCulling();
 		}
@@ -67,5 +68,6 @@ public class EntityRenderer {
 				entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(),
 				entity.getScale());
 		shader.setTransformMat4(transformationMat4);
+		shader.setOffset(entity.getTextureXOffset(), entity.getTexureYOffset());
 	}
 }
