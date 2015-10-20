@@ -46,7 +46,7 @@ public class TerrainShader extends ShaderProgram {
 		backgroundTexSamplerLoc = super.getUniformLocation("backgroundTexSampler");
 		rTexSamplerLoc = super.getUniformLocation("rTexSampler");
 		gTexSamplerLoc = super.getUniformLocation("gTexSampler");
-		bTexSamplerLoc = super.getUniformLocation("brTexSampler");
+		bTexSamplerLoc = super.getUniformLocation("bTexSampler");
 		blendTexSamplerLoc = super.getUniformLocation("blendTexSampler");
 	}
 	
