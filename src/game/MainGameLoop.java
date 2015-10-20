@@ -74,15 +74,13 @@ public class MainGameLoop {
 		}
 
 		Terrain terrain1 = new Terrain(0, -1, loader, texPack, blendTex, "heightMap");
-		Terrain terrain2 = new Terrain(-1, -1, loader, texPack, blendTex, "heightMap");
 		MasterRenderer renderer = new MasterRenderer();
 		
 		
 		while(!Display.isCloseRequested()){
 			camera.move();
-			player.move();
+			player.move(terrain1);
 			renderer.processTerrain(terrain1);
-			renderer.processTerrain(terrain2);
 			for (Entity entity : entites) {
 				renderer.processEntity(entity);
 			}

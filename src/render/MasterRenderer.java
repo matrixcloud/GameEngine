@@ -35,6 +35,7 @@ public class MasterRenderer {
 	
 	
 	public MasterRenderer(){
+//		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		enableCulling();
 		createProjectionMat4();
 		rendererer = new EntityRenderer(shader, projectionMat4);
