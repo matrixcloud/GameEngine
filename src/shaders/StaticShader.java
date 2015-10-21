@@ -1,5 +1,7 @@
 package shaders;
 
+import java.util.List;
+
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -10,17 +12,19 @@ import utils.Maths;
 public class StaticShader extends ShaderProgram {
 	private static final String VERTEX_FILE = "src/shaders/basic.vert";
 	private static final String FRAGMENT_FILE = "src/shaders/basic.frag";
+	private static final int MAX_LIGHTS = 4;
 	private int transformMat4Loc;
 	private int projectionMat4Loc;
 	private int viewMat4Loc;
-	private int lightPosition_worldspaceLoc;
-	private int lightColorLoc;
+	private int lightPosition_worldspaceLoc[];
+	private int lightColorLoc[];
 	private int shineDamperLoc;
 	private int reflectivityLoc;
 	private int useFakeLightingLoc;
 	private int skyColorLoc;
 	private int numberOfRowsLoc;
 	private int offsetLoc;
+	
 	
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -38,14 +42,20 @@ public class StaticShader extends ShaderProgram {
 		transformMat4Loc = super.getUniformLocation("transformMat4");
 		projectionMat4Loc = super.getUniformLocation("projectionMat4");
 		viewMat4Loc = super.getUniformLocation("viewMat4");
-		lightPosition_worldspaceLoc = super.getUniformLocation("lightPosition_worldspace");
-		lightColorLoc = super.getUniformLocation("lightColor");
 		shineDamperLoc = super.getUniformLocation("shineDamper");
 		reflectivityLoc = super.getUniformLocation("reflectivity");
 		useFakeLightingLoc = super.getUniformLocation("useFakeLighting");
 		skyColorLoc = super.getUniformLocation("skyColor");
 		numberOfRowsLoc = super.getUniformLocation("numberOfRows");
 		offsetLoc = super.getUniformLocation("offset");
+	
+		lightPosition_worldspaceLoc = new int[MAX_LIGHTS];
+		lightColorLoc = new int[MAX_LIGHTS];
+		for(int i = 0; i < MAX_LIGHTS; i++){
+			lightPosition_worldspaceLoc[i] = 
+					this.getUniformLocation("lightPosition_worldspace[" + i + "]");
+			lightColorLoc[i] = this.getUniformLocation("lightColor[" + i + "]");
+		}
 	}
 	
 	public void setShineVariables(float damper, float reflectivity){
@@ -66,9 +76,17 @@ public class StaticShader extends ShaderProgram {
 		super.setMatrix4(viewMat4Loc, viewMat4);
 	}
 	
-	public void setLight(Light light){
-		super.setVector(lightPosition_worldspaceLoc, light.getPosition());
-		super.setVector(lightColorLoc, light.getColor());
+	public void setLights(List<Light> lights){
+		for(int i = 0; i < MAX_LIGHTS; i++){
+			if(i < lights.size()){
+				Light light = lights.get(i);
+				super.setVector(lightPosition_worldspaceLoc[i], light.getPosition());
+				super.setVector(lightColorLoc[i], light.getColor());
+			}else{
+				super.setVector(lightPosition_worldspaceLoc[i], new Vector3f(0, 0, 0));
+				super.setVector(lightColorLoc[i], new Vector3f(0, 0, 0));
+			}
+		}
 	}
 	
 	public void setUseFakeLighting(boolean useFake){

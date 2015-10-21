@@ -29,7 +29,6 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		
-		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 		//*******************Load terrain textures*************//
 		TerrainTexture backgroundTex = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTex = new TerrainTexture(loader.loadTexture("dirt"));
@@ -86,7 +85,13 @@ public class MainGameLoop {
 		GuiTexture thinmatTex = new GuiTexture(loader.loadTexture("thinmatrix"),new Vector2f(0.3f, 0.4f), new Vector2f(0.25f, 0.25f));
 		guis.add(logoTex);
 		guis.add(thinmatTex);
+		//***************Generate Lights********************//
+		List<Light> lights = new ArrayList<>();
+		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1, 1, 1)));
+		lights.add(new Light(new Vector3f(-200, 10, -200), new Vector3f(10, 0, 0)));
+		lights.add(new Light(new Vector3f(200, 10, 200), new Vector3f(0, 0, 10)));
 		
+		//**************Create Renderer********************//
 		MasterRenderer renderer = new MasterRenderer();
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
@@ -97,7 +102,7 @@ public class MainGameLoop {
 			for (Entity entity : entites) {
 				renderer.processEntity(entity);
 			}
-			renderer.render(light, camera);
+			renderer.render(lights, camera);
 			guiRenderer.render(guis);
 			DisplayManager.updateDisplay();
 		}

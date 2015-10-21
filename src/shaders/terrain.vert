@@ -7,10 +7,10 @@ in vec3 normal;
 uniform mat4 transformMat4;
 uniform mat4 viewMat4;
 uniform mat4 projectionMat4;
-uniform vec3 lightPosition_worldspace;
+uniform vec3 lightPosition_worldspace[4];
 
 out vec2 pass_textureCoords;
-out vec3 toLightVector;
+out vec3 toLightVector[4];
 out vec3 surfaceNormal;
 out vec3 toCameraVector;
 out float visibility;
@@ -26,7 +26,9 @@ void main(void){
 	pass_textureCoords = textureCoords;
 	
 	surfaceNormal = (transformMat4 * vec4(normal, 0)).xyz;
-	toLightVector = lightPosition_worldspace - position_worldspace.xyz;
+	for(int i = 0; i < 4; i++){
+		toLightVector[i] = lightPosition_worldspace[i] - position_worldspace.xyz;
+	}
 	toCameraVector = (inverse(viewMat4) * vec4(0, 0, 0, 1)).xyz - position_worldspace.xyz;
 	
 	float distance = length(position_cameraspace.xyz);
