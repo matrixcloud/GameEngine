@@ -26,6 +26,7 @@ public class TerrainShader extends ShaderProgram {
 	private int bTexSamplerLoc;
 	private int blendTexSamplerLoc;
 	private int skyColorLoc;
+	private int attenuationLoc[];
 	
 	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -54,10 +55,12 @@ public class TerrainShader extends ShaderProgram {
 		
 		lightPosition_worldspaceLoc = new int[MAX_LIGHTS];
 		lightColorLoc = new int[MAX_LIGHTS];
+		attenuationLoc = new int[MAX_LIGHTS];
 		for(int i = 0; i < MAX_LIGHTS; i++){
 			lightPosition_worldspaceLoc[i] = 
 					this.getUniformLocation("lightPosition_worldspace[" + i + "]");
 			lightColorLoc[i] = this.getUniformLocation("lightColor[" + i + "]");
+			attenuationLoc[i] = this.getUniformLocation("attenuation[" + i + "]");
 		}
 	}
 	
@@ -93,9 +96,11 @@ public class TerrainShader extends ShaderProgram {
 				Light light = lights.get(i);
 				super.setVector(lightPosition_worldspaceLoc[i], light.getPosition());
 				super.setVector(lightColorLoc[i], light.getColor());
+				super.setVector(attenuationLoc[i], light.getAttenuation());
 			}else{
 				super.setVector(lightPosition_worldspaceLoc[i], new Vector3f(0, 0, 0));
 				super.setVector(lightColorLoc[i], new Vector3f(0, 0, 0));
+				super.setVector(attenuationLoc[i], new Vector3f(1, 0, 0));
 			}
 		}
 	}

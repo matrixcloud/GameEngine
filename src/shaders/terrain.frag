@@ -15,6 +15,7 @@ uniform sampler2D gTexSampler;
 uniform sampler2D bTexSampler;
 uniform sampler2D blendTexSampler;
 uniform vec3 lightColor[4];
+uniform vec3 attenuation[4];
 uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColor;
@@ -35,10 +36,13 @@ void main(){
 	vec3 totalSpecular = vec3(0);
 
 	for(int i = 0; i < 4; i++){
+		float dis = length(toLightVector[i]);
+		float attFactor = attenuation[i].x + attenuation[i].y * dis + attenuation[i].z * dis * dis;
+		
 		vec3 l = normalize(toLightVector[i]);
 		float cosTheta = dot(n, l);
 		float brightness = max(cosTheta, 0.0); 
-		vec3 diffuse = brightness * lightColor[i];
+		vec3 diffuse = (brightness * lightColor[i])/attFactor;
 		totalDiffuse += diffuse;
 	
 		vec3 incomingLight = -l;
@@ -46,7 +50,7 @@ void main(){
 		float specularFactor = dot(reflectedLightDirection, unitToCameraVector);
 		specularFactor = max(specularFactor, 0.0);
 		float dampedFactor = pow(specularFactor, shineDamper);
-		vec3 finalSpecular = reflectivity * dampedFactor * lightColor[i];
+		vec3 finalSpecular = (reflectivity * dampedFactor * lightColor[i])/attFactor;
 		totalSpecular += finalSpecular;
 	}
 	// calculate the ambient light

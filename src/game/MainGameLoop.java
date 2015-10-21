@@ -43,6 +43,7 @@ public class MainGameLoop {
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
 		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
 		ModelTexture fernTexAtlases = new ModelTexture(loader.loadTexture("fern"));
+		ModelTexture lampTex = new ModelTexture(loader.loadTexture("lamp"));
 		grassTex.setTransparent(true);
 		grassTex.setUseFakeLighting(true);
 		fernTexAtlases.setTransparent(true);
@@ -54,7 +55,8 @@ public class MainGameLoop {
 		TextureModel grassModel = new TextureModel(OBJLoader.load("grassModel", loader), grassTex);
 		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTexAtlases);
 		TextureModel playerModel = new TextureModel(OBJLoader.load("person", loader), playerTex);
-		Player player = new Player(playerModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
+		TextureModel lampModel = new TextureModel(OBJLoader.load("lamp", loader), lampTex);
+		Player player = new Player(playerModel, new Vector3f(185, 0, -185), 0, 0, 0, 1);
 		Camera camera = new Camera(player);
 		entites.add(player);
 		//*****************Generate Entity***************//
@@ -87,9 +89,12 @@ public class MainGameLoop {
 		guis.add(thinmatTex);
 		//***************Generate Lights********************//
 		List<Light> lights = new ArrayList<>();
-		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1, 1, 1)));
-		lights.add(new Light(new Vector3f(-200, 10, -200), new Vector3f(10, 0, 0)));
-		lights.add(new Light(new Vector3f(200, 10, 200), new Vector3f(0, 0, 10)));
+		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
+		lights.add(new Light(new Vector3f(185, 10, -200), new Vector3f(2, 0, 0), new Vector3f(1, 0.01f, 0.002f)));
+		lights.add(new Light(new Vector3f(300, 10, -200), new Vector3f(0, 0, 10), new Vector3f(1, 0.01f, 0.002f)));
+		//**************Add Lamp Models***********************//
+		entites.add(new Entity(lampModel, new Vector3f(185, terrain.getHeightOfTerrain(185, -200), -200), 0, 0, 0, 1));
+		entites.add(new Entity(lampModel, new Vector3f(300, terrain.getHeightOfTerrain(300, -200), -200), 0, 0, 0, 1));
 		
 		//**************Create Renderer********************//
 		MasterRenderer renderer = new MasterRenderer();
