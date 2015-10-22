@@ -15,6 +15,7 @@ import entities.Light;
 import models.TextureModel;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import skybox.SkyboxRenderer;
 import terrains.Terrain;
 
 public class MasterRenderer {
@@ -26,20 +27,22 @@ public class MasterRenderer {
 	private static final float GREEN = 0.5f;
 	private static final float BLUE = 0.5f;
 	private Matrix4f projectionMat4;
-	private StaticShader shader = new StaticShader();
+	private StaticShader entityShader = new StaticShader();
 	private TerrainShader terrainShader = new TerrainShader();
 	private TerrainRenderer terrainRenderer;
-	private EntityRenderer rendererer;
+	private EntityRenderer entityRendererer;
+	private SkyboxRenderer skyboxRenderer;
 	private Map<TextureModel,List<Entity>> entityMap = new HashMap<>();
 	private List<Terrain> terrains = new ArrayList<>();
 	
 	
-	public MasterRenderer(){
+	public MasterRenderer(Loader loader){
 //		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		enableCulling();
 		createProjectionMat4();
-		rendererer = new EntityRenderer(shader, projectionMat4);
+		entityRendererer = new EntityRenderer(entityShader, projectionMat4);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMat4);
+		skyboxRenderer = new SkyboxRenderer(loader, projectionMat4);
 	}
 	
 	public static void enableCulling(){
@@ -53,12 +56,12 @@ public class MasterRenderer {
 	
 	public void render(List<Light> lights, Camera camera){
 		this.prepare();
-		shader.start();
-		shader.setLights(lights);
-		shader.setViewMat4(camera);
-		shader.setSkyColor(RED, GREEN, BLUE);
-		rendererer.render(entityMap);
-		shader.stop();
+		entityShader.start();
+		entityShader.setLights(lights);
+		entityShader.setViewMat4(camera);
+		entityShader.setSkyColor(RED, GREEN, BLUE);
+		entityRendererer.render(entityMap);
+		entityShader.stop();
 		
 		terrainShader.start();
 		terrainShader.setLights(lights);
@@ -66,6 +69,8 @@ public class MasterRenderer {
 		terrainShader.setSkyColor(RED, GREEN, BLUE);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+		
+		skyboxRenderer.render(camera);
 		
 		entityMap.clear();
 		terrains.clear();
@@ -109,7 +114,7 @@ public class MasterRenderer {
 	}
 	
 	public void cleanup(){
-		shader.cleanup();
+		entityShader.cleanup();
 		terrainShader.cleanup();
 	}
 }

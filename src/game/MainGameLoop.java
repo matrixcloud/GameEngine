@@ -97,7 +97,7 @@ public class MainGameLoop {
 		entites.add(new Entity(lampModel, new Vector3f(300, terrain.getHeightOfTerrain(300, -200), -200), 0, 0, 0, 1));
 		
 		//**************Create Renderer********************//
-		MasterRenderer renderer = new MasterRenderer();
+		MasterRenderer renderer = new MasterRenderer(loader);
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
 		while(!Display.isCloseRequested()){
