@@ -3,14 +3,13 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="E:/Libs/java/lwjgl-2.9.3/jar/lwjgl.jar" sourcepath="E:/Libs/java/lwjgl-2.9.3/source/src/java">
+	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/E:/Libs/java/lwjgl-2.9.3/javadoc/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/Libs/java/lwjgl-2.9.3/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GameEngine/lib/native"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/Libs/java/slick-util/slick-util.jar"/>
-	<classpathentry kind="lib" path="E:/Libs/java/lwjgl-2.9.3/jar/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="lib/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
