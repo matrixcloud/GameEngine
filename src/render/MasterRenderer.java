@@ -100,13 +100,12 @@ public class MasterRenderer {
 	
 	private void createProjectionMat4(){
 		float aspectRatio = (float)Display.getWidth() / (float)Display.getHeight();
-		float yScale = (float) ((1f / Math.toRadians(FOV/2)) * aspectRatio);
-		float xScale = yScale / aspectRatio;
+		float tanValue = (float) Math.tan(FOV/2);
 		float frustumLength = FAR_PLANE - NEAR_PLANE;
 		
 		projectionMat4 = new Matrix4f();
-		projectionMat4.m00 = xScale;
-		projectionMat4.m11 = yScale;
+		projectionMat4.m00 = 1f/tanValue;
+		projectionMat4.m11 = aspectRatio/(tanValue);
 		projectionMat4.m22 = -((FAR_PLANE - NEAR_PLANE) / frustumLength);
 		projectionMat4.m23 = -1;
 		projectionMat4.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustumLength);
