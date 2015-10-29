@@ -58,5 +58,4 @@ void main(){
 	
 	fragColor = vec4(totalDiffuse, 1.0) * totalColor
 	 				+ vec4(totalSpecular, 1.0);
-	fragColor = mix(vec4(skyColor, 1), fragColor, visibility);
 }

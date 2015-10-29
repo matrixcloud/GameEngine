@@ -24,6 +24,7 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import utils.MousePicker;
+import water.WaterFrameBuffers;
 import water.WaterRenderer;
 import water.WaterShader;
 import water.WaterTile;
@@ -47,7 +48,7 @@ public class MainGameLoop {
 		ModelTexture treeTex = new ModelTexture(loader.loadTexture("tree"));
 		ModelTexture grassTex = new ModelTexture(loader.loadTexture("grassTexture"));
 		ModelTexture fernTexAtlases = new ModelTexture(loader.loadTexture("fern"));
-		ModelTexture lampTex = new ModelTexture(loader.loadTexture("lamp"));
+		ModelTexture rocksTex = new ModelTexture(loader.loadTexture("rocks"));
 		grassTex.setTransparent(true);
 		grassTex.setUseFakeLighting(true);
 		fernTexAtlases.setTransparent(true);
@@ -59,50 +60,44 @@ public class MainGameLoop {
 		TextureModel grassModel = new TextureModel(OBJLoader.load("grassModel", loader), grassTex);
 		TextureModel fernModel = new TextureModel(OBJLoader.load("fern", loader), fernTexAtlases);
 		TextureModel playerModel = new TextureModel(OBJLoader.load("person", loader), playerTex);
-		TextureModel lampModel = new TextureModel(OBJLoader.load("lamp", loader), lampTex);
+		TextureModel rocksModel = new TextureModel(OBJLoader.load("rocks", loader), rocksTex);
 		Player player = new Player(playerModel, new Vector3f(185, 0, -185), 0, 0, 0, 1);
 		Camera camera = new Camera(player);
 		entites.add(player);
+		entites.add(new Entity(rocksModel, new Vector3f(75, 4.8f, -75), 0, 0, 0, 70));
 		//*****************Generate Entity***************//
 		Random rd = new Random();
-		for(int i = 0; i < 500; i++){
+		for(int i = 0; i < 20; i++){
 			//add tree
-			float x = rd.nextFloat() * 800;
-			float z = rd.nextFloat() * -600;
+			float x = rd.nextFloat() * 150;
+			float z = rd.nextFloat() * -150;
 			float y = terrain.getHeightOfTerrain(x, z);
+			if(y < 0) continue;
 			Entity tree = new Entity(treeModel, new Vector3f(x, y, z), 0, 0, 0, rd.nextFloat() * 10 + 0.1f);
 			entites.add(tree);
 			//add grass
-			x = rd.nextFloat() * 800;
-			z = rd.nextFloat() * -600;
+			x = rd.nextFloat() * 150;
+			z = rd.nextFloat() * -150;
 			y = terrain.getHeightOfTerrain(x, z);
+			if(y < 0) continue;
 			Entity grass = new Entity(grassModel, new Vector3f(x, y, z), 0, 0, 0, 1);
 			entites.add(grass);
 			//add fern
-			x = rd.nextFloat() * 800;
-			z = rd.nextFloat() * -600;
+			x = rd.nextFloat() * 150;
+			z = rd.nextFloat() * -150;
 			y = terrain.getHeightOfTerrain(x, z);
+			if(y < 0) continue;
 			Entity fern = new Entity(fernModel, rd.nextInt(4), new Vector3f(x, y, z), 0, 0, 0, 0.6f);
 			entites.add(fern);
 		}
 		//****************Load GUI textures****************//
-		List<GuiTexture> guis = new ArrayList<>();
-		GuiTexture logoTex = new GuiTexture(loader.loadTexture("socuwan"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
-		GuiTexture thinmatTex = new GuiTexture(loader.loadTexture("thinmatrix"),new Vector2f(0.3f, 0.4f), new Vector2f(0.25f, 0.25f));
-		guis.add(logoTex);
-		guis.add(thinmatTex);
 		//***************Generate Lights********************//
 		List<Light> lights = new ArrayList<>();
 		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
 		lights.add(new Light(new Vector3f(185, 10, -200), new Vector3f(2, 0, 0), new Vector3f(1, 0.01f, 0.002f)));
 		lights.add(new Light(new Vector3f(300, 10, -200), new Vector3f(0, 0, 10), new Vector3f(1, 0.01f, 0.002f)));
-		//**************Add Lamp Models***********************//
-		entites.add(new Entity(lampModel, new Vector3f(185, terrain.getHeightOfTerrain(185, -200), -200), 0, 0, 0, 1));
-		entites.add(new Entity(lampModel, new Vector3f(300, terrain.getHeightOfTerrain(300, -200), -200), 0, 0, 0, 1));
-		
 		//**************Create Renderer********************//
 		MasterRenderer renderer = new MasterRenderer(loader);
-		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMat4());
 		
 		//*************Setup Water Renderer***************//
@@ -111,12 +106,24 @@ public class MainGameLoop {
 		List<WaterTile> waters = new ArrayList<>();
 		waters.add(new WaterTile(75, -75, 0));
 		
+		WaterFrameBuffers fbos = new WaterFrameBuffers();
+		List<GuiTexture> guis = new ArrayList<>();
+		GuiTexture guiTex = new GuiTexture(fbos.getReflectionTexture(), new Vector2f(-0.5f, 0.5f), new Vector2f(0.5f, 0.5f));
+		guis.add(guiTex);
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
+		
 		while(!Display.isCloseRequested()){
 			camera.move();
 			player.move(terrain);
-			
 			picker.update();
-//			System.out.println(picker.getCurrentRay());
+			
+			fbos.bindReflectionFrameBuffer();
+			renderer.processTerrain(terrain);
+			for (Entity entity : entites) {
+				renderer.processEntity(entity);
+			}
+			renderer.render(lights, camera);
+			fbos.unbindCurrentFrameBuffer();
 			
 			renderer.processTerrain(terrain);
 			for (Entity entity : entites) {
@@ -125,6 +132,7 @@ public class MainGameLoop {
 			renderer.render(lights, camera);
 			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
+			
 			DisplayManager.updateDisplay();
 		}
 		
