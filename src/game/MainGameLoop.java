@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -12,6 +14,7 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import entities.UniversalCamera;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import models.TextureModel;
@@ -62,8 +65,7 @@ public class MainGameLoop {
 		TextureModel playerModel = new TextureModel(OBJLoader.load("person", loader), playerTex);
 		TextureModel rocksModel = new TextureModel(OBJLoader.load("rocks", loader), rocksTex);
 		Player player = new Player(playerModel, new Vector3f(185, 0, -185), 0, 0, 0, 1);
-		Camera camera = new Camera(player);
-		entites.add(player);
+		
 		entites.add(new Entity(rocksModel, new Vector3f(75, 4.8f, -75), 0, 0, 0, 70));
 		//*****************Generate Entity***************//
 		Random rd = new Random();
@@ -98,7 +100,7 @@ public class MainGameLoop {
 		lights.add(new Light(new Vector3f(300, 10, -200), new Vector3f(0, 0, 10), new Vector3f(1, 0.01f, 0.002f)));
 		//**************Create Renderer********************//
 		MasterRenderer renderer = new MasterRenderer(loader);
-		MousePicker picker = new MousePicker(camera, renderer.getProjectionMat4());
+		
 		
 		//*************Setup Water Renderer***************//
 		WaterShader waterShader = new WaterShader();
@@ -112,10 +114,14 @@ public class MainGameLoop {
 		guis.add(guiTex);
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
+		Camera camera = new UniversalCamera();
+		MousePicker picker = new MousePicker(camera, renderer.getProjectionMat4());
+
 		while(!Display.isCloseRequested()){
 			camera.move();
 			player.move(terrain);
 			picker.update();
+			
 			
 			fbos.bindReflectionFrameBuffer();
 			renderer.processTerrain(terrain);

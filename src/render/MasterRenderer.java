@@ -19,7 +19,7 @@ import skybox.SkyboxRenderer;
 import terrains.Terrain;
 
 public class MasterRenderer {
-	private static final float FOV = 70.0f;
+	private static final float FOVY = 70.0f;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 100.0f;
 	//the sky color
@@ -100,7 +100,7 @@ public class MasterRenderer {
 	
 	private void createProjectionMat4(){
 		float aspectRatio = (float)Display.getWidth() / (float)Display.getHeight();
-		float tanValue = (float) Math.tan(FOV/2);
+		float tanValue = (float) Math.tan(FOVY/2);
 		float frustumLength = FAR_PLANE - NEAR_PLANE;
 		
 		projectionMat4 = new Matrix4f();
